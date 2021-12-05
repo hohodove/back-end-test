@@ -1,8 +1,8 @@
 package com.test.entity;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class Employee {
   private Long id;
   private String name;
