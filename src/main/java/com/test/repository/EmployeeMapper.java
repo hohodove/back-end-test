@@ -21,10 +21,10 @@ public interface EmployeeMapper {
   @Select("SELECT * FROM employee WHERE id = #{id}")
   Employee select(Long id);
 
-  @Insert("INSERT INTO employee (id, name, pass) values (#{id}, #{name}, #{pass}")
+  @Insert("insert into employee (id, name, pass) values (#{id}, #{name}, #{pass})")
   int insert(Employee employee);
 
-  @Update("UPDATE employee set name = #{name}, pass = #{pass} where id = #{id}")
+  @Update("update employee set name = #{name}, pass = #{pass} where id = #{id}")
   int update(Employee employee);
 
   @Delete("delete from employee where id = #{id}")
