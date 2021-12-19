@@ -1,4 +1,4 @@
 # back-end-test
 
-業務にてVue.jsを導入するための検証用。
+業務にてSpring Bootを導入するための検証用。
 
