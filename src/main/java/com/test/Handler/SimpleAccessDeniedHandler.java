@@ -16,6 +16,7 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request,
                      HttpServletResponse response,
                      AccessDeniedException exception) throws IOException, ServletException {
+        System.out.println("decied 1");
         response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
   }
 }

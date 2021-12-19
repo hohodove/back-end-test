@@ -19,6 +19,7 @@ public class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint 
       if (response.isCommitted()) {
           return;
       }
+      System.out.println("decied 2");
       response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
   }
   

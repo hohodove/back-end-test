@@ -6,18 +6,16 @@ import com.test.Handler.SimpleAccessDeniedHandler;
 import com.test.Handler.SimpleAuthenticationEntryPoint;
 import com.test.Handler.SimpleAuthenticationFailureHandler;
 import com.test.Handler.SimpleAuthenticationSuccessHandler;
+import com.test.service.UserDetailsServiceImple;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -30,8 +28,11 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   
+  @Autowired
+  private UserDetailsServiceImple userDetailsServiceImple;
+
   @Bean
-  public PasswordEncoder passwordEncoder() {
+  public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   };
 
@@ -46,14 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                "/webjars/**");
   }
 
-  @Autowired
-  public void configureGlocal(AuthenticationManagerBuilder auth, 
-      @Qualifier("simpleUserDetailsService") UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder) throws Exception {
+  @Override
+  public void configure(AuthenticationManagerBuilder auth) throws Exception {
   
       auth.eraseCredentials(true)
-          .userDetailsService(userDetailsService)
-          .passwordEncoder(passwordEncoder);
+          .userDetailsService(userDetailsServiceImple)
+          .passwordEncoder(passwordEncoder());
   }
 
   @Override
@@ -82,10 +81,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessHandler(logoutSuccessHandler())
         .and()
         .csrf()
-            //.ignoringAntMatchers("/login")
+            .ignoringAntMatchers("/login")
             .csrfTokenRepository(new CookieCsrfTokenRepository())
         ;
-  }
+        
+      }
 
   AuthenticationEntryPoint authenticationEntryPoint() {
     return new SimpleAuthenticationEntryPoint();
