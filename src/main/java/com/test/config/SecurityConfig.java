@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .mvcMatchers("/prelogin", "/greeting")
+        .mvcMatchers("/greeting")
             .permitAll()
         .anyRequest()
             .authenticated()
@@ -80,9 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .deleteCookies("JSESSIONID")
             .logoutSuccessHandler(logoutSuccessHandler())
         .and()
+        .cors()
+        .and()
         .csrf()
             .ignoringAntMatchers("/login")
-            .csrfTokenRepository(new CookieCsrfTokenRepository())
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         ;
         
       }

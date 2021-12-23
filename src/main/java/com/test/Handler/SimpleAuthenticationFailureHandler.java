@@ -16,7 +16,7 @@ public class SimpleAuthenticationFailureHandler implements AuthenticationFailure
   public void onAuthenticationFailure(HttpServletRequest request,
                                       HttpServletResponse response,
                                       AuthenticationException exception) throws IOException, ServletException {
-      System.out.println("decied 3");
+      System.out.println("Authentication Failuere.");
       response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
   }
 
