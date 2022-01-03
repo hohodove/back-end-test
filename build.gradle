@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.7'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'com.dorongold.task-tree' version '2.1.0'
 }
 
 group = 'com.test'
@@ -38,4 +39,76 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+def templateFile = 'application_war-template.properties'
+def configFile = 'application.properties'
+def targetEnv = ''
+
+task replaceProperties {
+	description 'Replace application.properties environment.'
+
+	doLast {
+		println '  start replacing :' + targetEnv
+
+		copy {
+			from 'src/main/resources/config'
+			include templateFile
+			into 'src/main/resources/config'
+			rename(templateFile, configFile)
+
+			expand([
+				buildEnv: targetEnv
+			])
+			println '  replacing finished'
+		}
+	}
+
+	finalizedBy {
+		war
+	}
+}
+
+task setLocalProperties {
+	description 'Replace application.properties environment.'
+
+	doLast {
+		println '  start replacing : local'
+
+		copy {
+			from 'src/main/resources/config'
+			include templateFile
+			into 'src/main/resources/config'
+			rename(templateFile, configFile)
+
+			expand([
+				buildEnv: 'local'
+			])
+			println '  replacing finished'
+		}
+	}
+}
+
+task warDevelop {
+	group = 'build'
+	description 'Create war file fo develop environment.'
+
+	doFirst {
+		targetEnv = 'develop'
+	}
+	finalizedBy {
+		replaceProperties
+	}
+}
+
+task warProduct {
+	group = 'build'
+	description 'Create war file fo product environment.'
+
+	doFirst {
+		targetEnv = 'product'
+	}
+	finalizedBy {
+		replaceProperties
+	}
 }

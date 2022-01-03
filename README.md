@@ -4,8 +4,7 @@
 ## 言語
 - Java 11
 
-## warにアーカイブ
+## develop環境のdocker向けにwarにアーカイブ
 ```
-./gradlew build
+./gradlew clean warDevelop setLocalProperties
 ```
-
